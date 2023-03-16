@@ -61,11 +61,12 @@ describe('basics of getWhereStatementFilters function', () => {
         expect(res).toEqual({name:'tyler',minEmployees:345})
     })
 
-    test('/companies returns correct results regardless of which order arguments are supplied in', async () => {
-        const res1 = await request(app).get('/companies?name=AS&minEmployees=500');
-        const res2 = await request(app).get('/companies?minEmployees=500&name=as');
+    test('/companies returns correct results regardless of which order query string arguments are supplied in', async () => {
+        // const res1 = await request(app).get('/companies?name=1&minEmployees=2');
+        const res1 = await request(app).get('/companies?minEmployees=2&name=3');
+        const res2 = await request(app).get('/companies?name=3&minEmployees=2');
 
-        expect(res1.companies).toEqual(res2.companies);
+        expect(res1.body.companies).toEqual(res2.body.companies);
     })
 })
 
