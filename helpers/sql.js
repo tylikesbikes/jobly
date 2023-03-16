@@ -30,6 +30,15 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
 }
 
 function getWhereStatementFilters(args) {
+  /**
+   * get minEmployeees, maxEmployees, and name from query string;
+   * name will be converted to lowercase because the /companies route is supposed to search in a case-insensitive way
+   * convert minEmployees & maxEmployees to numbers when they're present.
+   * if minEmployees > maxEmployees return 400
+   * 
+   * ignore any querystring arguments not called minEmployees, maxEmployees, or name.  return an object
+   * with the relevant query string properties
+   */
   if ((args['minEmployees'] && args['maxEmployees']) && args['minEmployees'] > args['maxEmployees']) {
     throw new ExpressError('minEmployees must be less than or equal to maxEmployees', 400);
   }
