@@ -45,7 +45,7 @@ function ensureLoggedIn(req, res, next) {
 
 function ensureLoggedInAdmin(req, res, next) {
   /**
-   * 
+   * ensure the user is logged in and has admin privileges
    */
   try {
     if (!res.locals.user.isAdmin) throw new UnauthorizedError();
@@ -55,9 +55,23 @@ function ensureLoggedInAdmin(req, res, next) {
   }
 }
 
+function ensureCorrectUser(req, res, next) {
+  /**
+   *  ensure the user is either logged in as an admin OR the logged in username = the username they're 
+   * trying to view/patch/delete 
+   */
+  try {
+    if (res.locals.user.isAdmin || (res.locals.user.username === req.params.username)) {return next();}
+    else throw new UnauthorizedError();
+  } catch (err) {
+    return next(err);
+  }
+}
+
 
 module.exports = {
   authenticateJWT,
   ensureLoggedIn,
-  ensureLoggedInAdmin
+  ensureLoggedInAdmin,
+  ensureCorrectUser
 };
