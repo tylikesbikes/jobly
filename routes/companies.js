@@ -8,6 +8,7 @@ const express = require("express");
 const { BadRequestError, ExpressError } = require("../expressError");
 const { ensureLoggedIn } = require("../middleware/auth");
 const Company = require("../models/company");
+const {getWhereStatementFilters,getWhereStatementFiltersWithLoop} = require('../helpers/sql');
 
 const companyNewSchema = require("../schemas/companyNew.json");
 const companyUpdateSchema = require("../schemas/companyUpdate.json");
@@ -52,23 +53,8 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 
 router.get("/", async function (req, res, next) {
   try {
-    const companyName = req.query.name;
-    const minEmployees = +req.query.minEmployees;
-    const maxEmployees = +req.query.maxEmployees;
-
-    if ((minEmployees && maxEmployees) && minEmployees > maxEmployees) {
-      throw new ExpressError('minEmployees must be less than or equal to maxEmployees', 400);
-    }
-    const filters = {};
-    if (companyName) {
-      filters.name = companyName.toLowerCase();
-    }
-    if (minEmployees) {
-      filters.minEmployees = minEmployees;
-    }
-    if (maxEmployees) {
-      filters.maxEmployees = maxEmployees;
-    }
+    
+    const filters = getWhereStatementFilters(req.query);
     const companies = await Company.findAll(filters);
     return res.json({ companies });
   } catch (err) {

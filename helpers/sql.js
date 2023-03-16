@@ -1,4 +1,4 @@
-const { BadRequestError } = require("../expressError");
+const { BadRequestError, ExpressError } = require("../expressError");
 
 // THIS NEEDS SOME GREAT DOCUMENTATION.
 
@@ -29,4 +29,21 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   };
 }
 
-module.exports = { sqlForPartialUpdate };
+function getWhereStatementFilters(args) {
+  if ((args['minEmployees'] && args['maxEmployees']) && args['minEmployees'] > args['maxEmployees']) {
+    throw new ExpressError('minEmployees must be less than or equal to maxEmployees', 400);
+  }
+  const filters = {};
+  if (args['name']) {
+    filters.name = args['name'].toLowerCase();
+  }
+  if (args['minEmployees']) {
+    filters.minEmployees = +args['minEmployees'];
+  }
+  if (args['maxEmployees']) {
+    filters.maxEmployees = +args['maxEmployees'];
+  }
+  return filters;
+}
+
+module.exports = { sqlForPartialUpdate, getWhereStatementFilters };
