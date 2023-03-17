@@ -55,4 +55,27 @@ function getWhereStatementFilters(args) {
   return filters;
 }
 
-module.exports = { sqlForPartialUpdate, getWhereStatementFilters };
+function getJobsFilters(args) {
+  /**
+   * get minEmployeees, maxEmployees, and name from query string;
+   * name will be converted to lowercase because the /companies route is supposed to search in a case-insensitive way
+   * convert minEmployees & maxEmployees to numbers when they're present.
+   * if minEmployees > maxEmployees return 400
+   * 
+   * ignore any querystring arguments not called minEmployees, maxEmployees, or name.  return an object
+   * with the relevant query string properties
+   */
+  const filters = {};
+  if (args['title']) {
+    filters.title = args['title'].toLowerCase();
+  }
+  if (args['minSalary']) {
+    filters.minSalary = +args['minSalary'];
+  }
+  if (args['hasEquity']) {
+    filters.hasEquity = args['hasEquity'];
+  }
+  return filters;
+}
+
+module.exports = { sqlForPartialUpdate, getWhereStatementFilters, getJobsFilters };
