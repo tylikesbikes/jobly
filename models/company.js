@@ -49,13 +49,13 @@ class Company {
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
 
-  static async findAll(filters) {
+  static async findAll(filters = {}) {
     /** accepted filters:  name, minEmployees, maxEmployees
     *   if minEmployees > maxEmployees respond with 404 & a helpful message
     */
     const whereClauses = [];
     let whereStatement = '';
-    if (filters.name) {
+    if (filters.hasOwnProperty('name')) {
       whereClauses.push(`lower(name) like '%${filters.name}%'`)
       whereStatement = 'WHERE '
     }
