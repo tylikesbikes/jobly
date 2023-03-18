@@ -76,7 +76,11 @@ router.get("/:companyHandle", async function (req, res, next) {
   try {
     const company = await Company.get(req.params.companyHandle);
     const jobs = await Job.findAll({companyHandle:req.params.companyHandle})
-    console.log('$#$^%#%$#:',jobs)
+    
+    if (jobs.length > 0) {
+      company.jobs = jobs;
+    }
+
 
     return res.json({ company });
   } catch (err) {

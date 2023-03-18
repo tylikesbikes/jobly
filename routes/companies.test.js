@@ -117,6 +117,15 @@ describe("GET /companies/:handle", function () {
       company: {
         handle: "c1",
         name: "C1",
+        jobs: 
+        [
+                 {
+                   "company_handle": "c1",
+                   "equity": "0.25",
+                   "salary": 1000000,
+                   "title": "Assassin",
+                 },
+               ],
         description: "Desc1",
         numEmployees: 1,
         logoUrl: "http://c1.img",
