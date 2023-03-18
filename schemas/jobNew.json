@@ -24,7 +24,6 @@
     "required": [
       "title",
       "company_handle",
-      "salary",
       "equity"
     ]
   }

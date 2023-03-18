@@ -54,7 +54,7 @@ class Job {
     /** accepted filters:  title, minSalary, maxSalary, minEquity, maxEquity, companyHandle
     *   if minSalary > maxSalary respond with 404 & a helpful message
     *   if minEquity > maxEquity respond with 404 & a helpful message
-    *   title & companyHandle shall be case-sensitive and allow for partial text matching
+    *   title shall be case-sensitive and allow for partial text matching
     */
     const whereClauses = [];
     let whereStatement = '';
@@ -68,7 +68,7 @@ class Job {
     }
     if (filters.hasEquity) {
       if (filters.hasEquity === 'true') {
-      whereClauses.push(`(equity equity > 0)`)
+      whereClauses.push(`(equity > 0)`)
       whereStatement = 'WHERE '
       
       } else if (filters.hasEquity === 'false') {
@@ -91,28 +91,43 @@ class Job {
 
   /** Given a job id, return data about the job.
    *
-   * Returns { handle, name, description, numEmployees, logoUrl, jobs }
-   *   where jobs is [{ id, title, salary, equity, companyHandle }, ...]
+   * Returns { id, title, salary, equity, company }
+   *   where company is [{ name, description, numEmployees, logoUrl }, ...]
    *
    * Throws NotFoundError if not found.
    **/
 
-  static async get(handle) {
-    const companyRes = await db.query(
-          `SELECT handle,
-                  name,
-                  description,
-                  num_employees AS "numEmployees",
-                  logo_url AS "logoUrl"
-           FROM companies
-           WHERE handle = $1`,
-        [handle]);
+  static async get(id) {
+    const jobRes = await db.query(
+          `SELECT j.id, j.title, j.salary, j.equity,
+                  c.name,
+                  c.description,
+                  c.num_employees AS "numEmployees",
+                  c.logo_url AS "logoUrl"
+           FROM jobs j
+           LEFT JOIN companies c
+              ON j.company_handle = c.handle
+           WHERE j.id = $1`,
+        [id]);
 
-    const company = companyRes.rows[0];
+    const jobData = jobRes.rows[0];
 
-    if (!company) throw new NotFoundError(`No company: ${handle}`);
+    if (!jobData) throw new NotFoundError(`No job: id# ${id}`);
 
-    return company;
+
+
+    return ({
+      id: jobData.id, 
+      title: jobData.title,
+      salary: jobData.salary,
+      equity: jobData.equity,
+      company: {
+        name:jobData.name,
+        description: jobData.description,
+        numEmployees: jobData.numEmployees,
+        logoUrl: jobData.logoUrl
+        }
+    });
   }
 
   /** Update company data with `data`.
