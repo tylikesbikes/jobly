@@ -12,6 +12,8 @@ const {getWhereStatementFilters,getWhereStatementFiltersWithLoop} = require('../
 
 const companyNewSchema = require("../schemas/companyNew.json");
 const companyUpdateSchema = require("../schemas/companyUpdate.json");
+const Job = require("../models/job");
+const { get } = require("../models/company");
 
 const router = new express.Router();
 
@@ -70,9 +72,12 @@ router.get("/", async function (req, res, next) {
  * Authorization required: none
  */
 
-router.get("/:handle", async function (req, res, next) {
+router.get("/:companyHandle", async function (req, res, next) {
   try {
-    const company = await Company.get(req.params.handle);
+    const company = await Company.get(req.params.companyHandle);
+    const jobs = await Job.findAll({companyHandle:req.params.companyHandle})
+    console.log('$#$^%#%$#:',jobs)
+
     return res.json({ company });
   } catch (err) {
     return next(err);

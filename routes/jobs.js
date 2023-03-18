@@ -56,8 +56,8 @@ router.get("/", async function (req, res, next) {
   try {
     
     const filters = getJobsFilters(req.query);
-    const companies = await Job.findAll(filters);
-    return res.json({ companies });
+    const jobs = await Job.findAll(filters);
+    return res.json({ jobs });
   } catch (err) {
     return next(err);
   }

@@ -67,6 +67,9 @@ class Company {
       whereClauses.push(`num_employees >= ${filters.minEmployees}`)
       whereStatement = 'WHERE '
     }
+    if (filters.companyHandle) {
+      whereClauses.push(`company_handle = '${filters.companyHandle}'`)
+    }
     if (whereStatement) {
       whereStatement += whereClauses.join(' and ');
     }

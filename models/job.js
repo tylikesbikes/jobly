@@ -66,6 +66,10 @@ class Job {
       whereClauses.push(`salary >= ${filters.minSalary}`)
       whereStatement = 'WHERE '
     }
+    if (filters.companyHandle) {
+      whereClauses.push(`company_handle = '${filters.companyHandle}'`)
+      whereStatement = 'WHERE '
+    }
     if (filters.hasEquity) {
       if (filters.hasEquity === 'true') {
       whereClauses.push(`(equity > 0)`)

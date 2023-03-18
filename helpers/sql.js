@@ -52,6 +52,9 @@ function getWhereStatementFilters(args) {
   if (args['maxEmployees']) {
     filters.maxEmployees = +args['maxEmployees'];
   }
+  if (args['companyHandle']) {
+    filters.companyHandle = args['companyHandle'].toLowerCase();
+  }
   return filters;
 }
 
@@ -74,6 +77,9 @@ function getJobsFilters(args) {
   }
   if (args['hasEquity']) {
     filters.hasEquity = args['hasEquity'];
+  }
+  if (args['companyHandle']) {
+    filters.companyHandle = args['companyHandle'].toLowerCase();
   }
   return filters;
 }
