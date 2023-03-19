@@ -45,7 +45,7 @@ describe("POST /companies", function () {
         .post("/companies")
         .send({
           handle: "new",
-          numEmployees: 10,
+          numEmployees: 10
         })
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(400);

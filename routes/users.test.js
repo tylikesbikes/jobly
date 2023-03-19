@@ -174,6 +174,7 @@ describe("GET /users/:username", function () {
         username: "u1",
         firstName: "U1F",
         lastName: "U1L",
+        jobs:[],
         email: "user1@user.com",
         isAdmin: false,
       },
