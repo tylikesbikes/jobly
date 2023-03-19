@@ -32,7 +32,7 @@ class Job {
           `INSERT INTO jobs
            (title, salary, equity, company_handle)
            VALUES ($1, $2, $3, $4)
-           RETURNING title, salary, equity, company_handle as "companyHandle"`,
+           RETURNING id, title, salary, equity, company_handle as "companyHandle"`,
         [
           title,
           salary,
