@@ -120,6 +120,7 @@ router.delete("/:username", ensureCorrectUser, async function (req, res, next) {
 
 
 /** POST /[username]/jobs/[jobId] => {applied: [jobId]}
+ * apply to a job.
  *  Authorization required:  logged in as admin OR logged in as user applying for job
  */
 router.post('/:username/jobs/:jobId', ensureCorrectUser, async function (req, res, next) {

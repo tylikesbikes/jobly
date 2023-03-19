@@ -12,6 +12,7 @@ const {
   commonAfterEach,
   commonAfterAll,
   u1Token,
+  u2Token
 } = require("./_testCommon");
 
 beforeAll(commonBeforeAll);
@@ -289,3 +290,30 @@ describe("DELETE /users/:username", function () {
     expect(resp.statusCode).toEqual(404);
   });
 });
+
+/**************************************** APPLY /users/:username/jobs/:jobId */
+
+describe('POST /users/:username/jobs/:jobId -- apply to jobs', () => {
+  test('must be logged in', async () => { 
+    const newApp = await request(app).post('/users/u1/jobs/1');
+    expect(newApp.status).toEqual(401);
+  })
+
+  test('logged in regular user can submit an app for themself but not for someone else', async () => { 
+    const newAppSelf = await request(app).post('/users/u2/jobs/1')
+      .set('authorization',u2Token);
+    expect(newAppSelf.status).toEqual(200);
+    const newAppOther = await request(app).post('/users/u1/jobs/1')
+    .set('authorization',u2Token);
+    expect(newAppOther.status).toEqual(401);
+  })
+
+  test('logged in ADMIN user can submit an app for themself for someone else', async () => { 
+    const newAppSelf = await request(app).post('/users/u1/jobs/1')
+      .set('authorization',u1Token);
+    expect(newAppSelf.status).toEqual(200);
+    const newAppOther = await request(app).post('/users/u2/jobs/1')
+    .set('authorization',u1Token);
+    expect(newAppOther.status).toEqual(200);
+  })
+})

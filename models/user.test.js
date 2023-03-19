@@ -229,3 +229,20 @@ describe("remove", function () {
     }
   });
 });
+
+/************************************ apply */
+describe('apply', () =>{
+  test('apply returns new job id', async () => {
+    const newApp = await User.apply('u1',1);
+    expect(newApp).toEqual(1);
+  })
+
+  test('apply with invalid username', async () => {
+    try {const newApp = await User.apply('asdf', 1);
+    // console.log(newApp);
+  }  catch(e) {
+    expect(e.detail).toEqual(`Key (username)=(asdf) is not present in table "users".`)
+  }
+  })
+
+})
