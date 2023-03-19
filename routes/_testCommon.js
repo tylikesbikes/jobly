@@ -67,6 +67,19 @@ async function commonBeforeAll() {
     equity:.25,
     company_handle:'c1'
   })
+  await Job.create({
+    title:'Scout',
+    salary:54321,
+    equity:0,
+    company_handle:'c1'
+  })
+  await Job.create({
+    title:'Spy',
+    salary:12345,
+    equity:0,
+    company_handle:'c2'
+  })
+
 }
 
 async function commonBeforeEach() {
@@ -83,7 +96,7 @@ async function commonAfterAll() {
 
 
 const u1Token = createToken({ username: "u1", isAdmin: true });
-const u2Token = createToken({username:'u2', isAdmin:false})
+const u2Token = createToken({username:'u2', isAdmin: false});
 
 
 module.exports = {

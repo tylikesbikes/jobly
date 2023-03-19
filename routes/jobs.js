@@ -26,7 +26,7 @@ const router = new express.Router();
  * Authorization required: login
  */
 
-router.post("/", ensureLoggedIn, async function (req, res, next) {
+router.post("/", ensureLoggedInAdmin, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, jobNewSchema);
     if (!validator.valid) {
@@ -34,8 +34,8 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
       throw new BadRequestError(errs);
     }
 
-    const company = await Job.create(req.body);
-    return res.status(201).json({ company });
+    const job = await Job.create(req.body);
+    return res.status(201).json({ job });
   } catch (err) {
     return next(err);
   }
@@ -91,7 +91,7 @@ router.get("/:id", async function (req, res, next) {
  * Authorization required: login
  */
 
-router.patch("/:handle", ensureLoggedInAdmin, async function (req, res, next) {
+router.patch("/:id", ensureLoggedInAdmin, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, jobUpdateSchema);
     if (!validator.valid) {
